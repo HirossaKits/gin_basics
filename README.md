@@ -2,6 +2,29 @@
 
 This repository is for self-learning go backend.
 
+## Set GO PATH
+
+```shell
+go env GOPATH
+vi ~/.bash_profile
+```
+
+and write
+
+```
+export PATH=$PATH:$(go env GOPATH)/bin
+```
+
+## Set test flags on VS Code
+
+```json
+{
+  "go.formatTool": "goimports",
+  "go.useLanguageServer": true,
+  "go.testFlags": ["-v", "-race"]
+}
+```
+
 ## Create DB
 
 https://hub.docker.com/_/postgres
@@ -111,4 +134,16 @@ brew install sqlc
 
 ```shell
 sqlc init
+```
+
+## Generate model
+
+```shell
+sqlc generate
+```
+
+## Install testify
+
+```shell
+go get github.com/stretchr/testify
 ```
