@@ -74,12 +74,24 @@ func TestDeleteEntry(t *testing.T) {
 }
 
 func TestListEntries(t *testing.T) {
+	account := CreateRandomAccount(t)
+
 	for i := 0; i < 10; i++ {
-		createRandomEntry(t)
+		arg := CreateEntriesParams{
+			AccountID: account.ID,
+			Amount:    util.RandomMoney(),
+		}
+		testQueries.CreateEntries(context.Background(), arg)
 	}
 
-	// arg := listEntries{
-	// 	AccountID:
-	// }
+	entries, err := testQueries.ListEntries(context.Background(), account.ID)
+	require.NoError(t, err)
+	require.Len(t, entries, 10)
 
+	for _, entry := range entries {
+		require.NotEmpty(t, entry.ID)
+		require.Equal(t, account.ID, entry.AccountID)
+		require.NotEmpty(t, entry.Amount)
+		require.NotEmpty(t, entry.CreatedAt)
+	}
 }
