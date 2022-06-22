@@ -49,6 +49,7 @@ func TestGetEntry(t *testing.T) {
 func TestUpdateEntry(t *testing.T) {
 	entry1 := createRandomEntry(t)
 	arg := UpdateEntryParams{
+		ID:     entry1.ID,
 		Amount: util.RandomMoney(),
 	}
 
@@ -64,7 +65,7 @@ func TestUpdateEntry(t *testing.T) {
 
 func TestDeleteEntry(t *testing.T) {
 	entry1 := createRandomEntry(t)
-	err := testQueries.DeleteAccount(context.Background(), entry1.ID)
+	err := testQueries.DeleteEntry(context.Background(), entry1.ID)
 	require.NoError(t, err)
 
 	entry2, err := testQueries.GetEntry(context.Background(), entry1.ID)
