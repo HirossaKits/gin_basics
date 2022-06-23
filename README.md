@@ -147,3 +147,23 @@ sqlc generate
 ```shell
 go get github.com/stretchr/testify
 ```
+
+## Make random int
+
+```go
+import (
+  "fmt"
+  "time"
+  "math/rand"
+)
+rand.Seed(time.Now().Unix())
+fmt.Println(rand.Intn(10))
+```
+
+## Read Input
+
+```go
+import "fmt"
+var input string
+fmt.Scan(&input)
+```
