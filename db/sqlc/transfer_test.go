@@ -2,8 +2,10 @@ package db
 
 import (
 	"context"
+	"database/sql"
 	"gin_basics/util"
 	"testing"
+	"time"
 
 	"github.com/stretchr/testify/require"
 )
@@ -38,6 +40,61 @@ func TestCreateTransfer(t *testing.T) {
 func TestGetTransfer(t *testing.T) {
 	transfer1 := createRandomTransfer(t)
 
-	transfer2, err := testQueries.GetEntry(context.Background(), transfer1.ID)
+	transfer2, err := testQueries.GetTransfer(context.Background(), transfer1.ID)
 
+	require.NoError(t, err)
+	require.NotEmpty(t, transfer2)
+
+	require.Equal(t, transfer1.ID, transfer2.ID)
+	require.Equal(t, transfer1.FromAccountID, transfer2.FromAccountID)
+	require.Equal(t, transfer1.ToAccountID, transfer2.ToAccountID)
+	require.Equal(t, transfer1.Amount, transfer2.Amount)
+
+	require.NotZero(t, transfer2.ID)
+	require.NotZero(t, transfer2.CreatedAt)
+}
+
+func TestUpdateTransfer(t *testing.T) {
+	transfer1 := createRandomTransfer(t)
+
+	arg := UpdateTransferParams{
+		ID:     transfer1.ID,
+		Amount: util.RandomMoney(),
+	}
+
+	transfer2, err := testQueries.UpdateTransfer(context.Background(), arg)
+	require.NoError(t, err)
+	require.NotEmpty(t, transfer2)
+	require.Equal(t, transfer1.ID, transfer2.ID)
+	require.Equal(t, transfer1.FromAccountID, transfer2.FromAccountID)
+	require.Equal(t, transfer1.ToAccountID, transfer2.ToAccountID)
+	require.Equal(t, arg.Amount, transfer2.Amount)
+	require.WithinDuration(t, transfer1.CreatedAt, transfer2.CreatedAt, time.Second)
+}
+
+func TestDeleteTransfer(t *testing.T) {
+	transfer1 := createRandomTransfer(t)
+
+	err := testQueries.DeleteTransfer(context.Background(), transfer1.ID)
+	require.NoError(t, err)
+
+	transfer2, err := testQueries.GetTransfer(context.Background(), transfer1.ID)
+	require.Error(t, err)
+	require.EqualError(t, err, sql.ErrNoRows.Error())
+	require.Empty(t, transfer2)
+}
+
+func TestListTransfers(t *testing.T) {
+	arg := ListTrasfersParams{
+		Limit:  5,
+		Offset: 5,
+	}
+
+	transfers, err := testQueries.ListTrasfers(context.Background(), arg)
+	require.NoError(t, err)
+	require.Len(t, transfers, 0)
+
+	for _, transfer := range transfers {
+		require.NotEmpty(t, transfer)
+	}
 }
