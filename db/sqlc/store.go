@@ -8,8 +8,8 @@ import (
 
 // Store provides all function to exectute db queries and transactions
 type Store struct {
-	*Queries
 	db *sql.DB
+	*Queries
 }
 
 func NewStore(db *sql.DB) *Store {
@@ -25,14 +25,16 @@ func (store *Store) execTx(ctx context.Context, fn func(*Queries) error) error {
 	if err != nil {
 		return err
 	}
+
 	q := New(tx)
 	err = fn(q)
 	if err != nil {
 		if rbErr := tx.Rollback(); rbErr != nil {
-			return fmt.Errorf("tx err: %v,eb err:%v", err, rbErr)
+			return fmt.Errorf("tx err: %v, rb err: %v", err, rbErr)
 		}
 		return err
 	}
+
 	return tx.Commit()
 }
 
@@ -86,8 +88,10 @@ func (store *Store) TransferTx(ctx context.Context, arg TransferTxParams) (Trans
 		}
 
 		// TODO: update accounts balance
+		result.ToAccount, err = q.GetAccount(ctx, arg.ToAccountID)
+		result.FromAccount, err = q.GetAccount(ctx, arg.FromAccountID)
 
-		return nil
+		return err
 	})
 	return result, err
 }
