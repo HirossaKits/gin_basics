@@ -1,7 +1,6 @@
 package db
 
 import (
-	"context"
 	"testing"
 )
 
@@ -32,13 +31,13 @@ func TestTransferTx(t *testing.T) {
 	// }
 
 	// ここからテストコード
-	_, _ = store.TransferTx(context.Background(), TransferTxParams{
-		FromAccountID: account1.ID,
-		ToAccountID:   account2.ID,
-		Amount:        amount,
-	})
-	_ = n
-	// _, _, _, _, _ = store, account1, account2, n, amount
+	// _, _ = store.TransferTx(context.Background(), TransferTxParams{
+	// 	FromAccountID: account1.ID,
+	// 	ToAccountID:   account2.ID,
+	// 	Amount:        amount,
+	// })
+	// _ = n
+	_, _, _, _, _ = store, account1, account2, n, amount
 	// ここまでテストコード
 
 	// check results
