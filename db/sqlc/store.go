@@ -8,8 +8,8 @@ import (
 
 // Store provides all function to exectute db queries and transactions
 type Store struct {
-	db *sql.DB
 	*Queries
+	db *sql.DB
 }
 
 func NewStore(db *sql.DB) *Store {
@@ -109,6 +109,9 @@ func (store *Store) TransferTx(ctx context.Context, arg TransferTxParams) (Trans
 			ID:      arg.ToAccountID,
 			Balance: account2.Balance + arg.Amount,
 		})
+		if err != nil {
+			return err
+		}
 
 		return nil
 	})
