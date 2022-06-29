@@ -167,3 +167,9 @@ import "fmt"
 var input string
 fmt.Scan(&input)
 ```
+
+## Install Gin
+
+```shell
+go get -u github.com/gin-gonic/gin
+```
