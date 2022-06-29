@@ -1,32 +1,31 @@
 package main
 
 import (
-	"github.com/gin-gonic/gin"
-	"net/http"
+	"database/sql"
+	"gin_basics/api"
+	db "gin_basics/db/sqlc"
+	"log"
+
+	_ "github.com/lib/pq"
+)
+
+const (
+	dbDriver      = "postgres"
+	dbSource      = "postgresql://root:secret@localhost:5434/simple_bank?sslmode=disable"
+	serverAddress = "0.0.0.0:8080"
 )
 
 func main() {
-	engine:=gin.Default()
+	conn, err := sql.Open(dbDriver, dbSource)
+	if err != nil {
+		log.Fatal("cannot connect to db:", err)
+	}
 
-	ua:=""
-	engine.Use(func(c *gin.Context) {
-		ua = c.GetHeader("User-Agent")
-		c.Next()
-	})
+	store := db.NewStore(conn)
+	server := api.NewServer(store)
 
-	engine.LoadHTMLGlob("templates/*")
-
-	engine.GET("/pages", func(c *gin.Context) {
-		c.HTML(http.StatusOK, "index.html", gin.H{
-			"message": "hello gin",
-		})
-	})
-
-	engine.GET("/", func(c *gin.Context) {
-		c.JSON(http.StatusOK, gin.H{
-			"message": "hello world",
-			"User-Agent": ua,
-		})
-	})
-	engine.Run(":3030")
+	err = server.Start(serverAddress)
+	if err != nil {
+		log.Fatal("cannot start server:", err)
+	}
 }
