@@ -85,14 +85,16 @@ func TestDeleteTransfer(t *testing.T) {
 }
 
 func TestListTransfers(t *testing.T) {
+	limit := 5
+
 	arg := ListTrasfersParams{
-		Limit:  5,
+		Limit:  int32(limit),
 		Offset: 5,
 	}
 
 	transfers, err := testQueries.ListTrasfers(context.Background(), arg)
 	require.NoError(t, err)
-	require.Len(t, transfers, 0)
+	require.Len(t, transfers, limit)
 
 	for _, transfer := range transfers {
 		require.NotEmpty(t, transfer)
