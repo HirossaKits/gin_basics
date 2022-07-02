@@ -74,7 +74,7 @@ func (q *Queries) ListEntries(ctx context.Context, accountID int64) ([]Entry, er
 		return nil, err
 	}
 	defer rows.Close()
-	var items []Entry
+	items := []Entry{}
 	for rows.Next() {
 		var i Entry
 		if err := rows.Scan(
