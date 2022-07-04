@@ -204,3 +204,15 @@ source ~/.zshrc
 ```shell
 which mockgen
 ```
+
+## Create mock DB
+
+```shell
+mockgen -destination db/mock/store.go gin_basics/db/sqlc Store
+```
+
+## Rename package of mock DB
+
+```shell
+mockgen -package mockdb -destination db/mock/store.go gin_basics/db/sqlc Store
+```
