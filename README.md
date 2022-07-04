@@ -178,6 +178,7 @@ go get -u github.com/gin-gonic/gin
 
 ```shell
 go get github.com/golang/mock/mockgen@v1.6.0
+go install github.com/golang/mock/mockgen@v1.6.0
 ```
 
 ## Add path to mockgen
