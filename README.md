@@ -173,3 +173,33 @@ fmt.Scan(&input)
 ```shell
 go get -u github.com/gin-gonic/gin
 ```
+
+## Install mockgen
+
+```shell
+go get github.com/golang/mock/mockgen@v1.6.0
+```
+
+## Add path to mockgen
+
+```shell
+vi ~/.zshrc
+```
+
+And add below line
+
+```shell
+export PATH=$PATH:~/go/bin
+```
+
+## Apply settings to shell
+
+```shell
+source ~/.zshrc
+```
+
+## Confirm place of mockgen
+
+```shell
+which mockgen
+```
