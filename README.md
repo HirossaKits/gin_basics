@@ -216,3 +216,15 @@ mockgen -destination db/mock/store.go gin_basics/db/sqlc Store
 ```shell
 mockgen -package mockdb -destination db/mock/store.go gin_basics/db/sqlc Store
 ```
+
+## Create blank migration file
+
+```shell
+migrate create -ext sql -dir db/migration -seq add_users
+```
+
+## Resolve migration error
+
+When migrate down fail below error
+error: Dirty database version 2. Fix and force version.
+Change database schema_migrations dirty value from ture to false
