@@ -16,7 +16,7 @@ func TestTransferTx(t *testing.T) {
 	fmt.Println(">> before:", account1.Balance, account2.Balance)
 
 	// run n concurrent transfer transactions
-	n := 5
+	n := 1
 	amount := int64(10)
 
 	errs := make(chan error)
@@ -38,11 +38,16 @@ func TestTransferTx(t *testing.T) {
 	// check results
 	existed := make(map[int]bool)
 	for i := 0; i < n; i++ {
+
+		fmt.Println(">> -1")
+
 		err := <-errs
 		require.NoError(t, err)
 
 		result := <-results
 		require.NotEmpty(t, result)
+
+		fmt.Println(">> 0")
 
 		// check transfer
 		transfer := result.Transfer
@@ -56,6 +61,8 @@ func TestTransferTx(t *testing.T) {
 		_, err = store.GetTransfer(context.Background(), transfer.ID)
 		require.NoError(t, err)
 
+		fmt.Println(">> 1")
+
 		// check entries
 		fromEntry := result.FromEntry
 		require.NotEmpty(t, fromEntry)
@@ -67,6 +74,8 @@ func TestTransferTx(t *testing.T) {
 		_, err = store.GetEntry(context.Background(), fromEntry.ID)
 		require.NoError(t, err)
 
+		fmt.Println(">> 2")
+
 		toEntry := result.ToEntry
 		require.NotEmpty(t, toEntry)
 		require.Equal(t, account2.ID, toEntry.AccountID)
@@ -76,6 +85,8 @@ func TestTransferTx(t *testing.T) {
 
 		_, err = store.GetEntry(context.Background(), toEntry.ID)
 		require.NoError(t, err)
+
+		fmt.Println(">> 3")
 
 		// check accounts
 		fromAccount := result.FromAccount
